@@ -1,0 +1,45 @@
+* {
+    margin: 0;
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(240, 210, 182);
+}
+
+#gameContainer {
+    background-image: radial-gradient(rgb(204, 183, 151), rgb(192, 170, 140));
+    width: clamp(0px, 520px, 95vw);
+    height: clamp(0px, 95vw, 520px);
+    display: grid;
+    grid-template-rows: 25% 25% 25% 25%;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+}
+
+.cell {
+    border: chocolate 2.5px solid;
+    text-align: center;
+    color: black;
+    font-size: 5vh;
+}
+
+.left {
+    border-left: chocolate 5px solid;
+}
+.right {
+    border-right: chocolate 5px solid;
+}
+.top {
+    border-top: chocolate 5px solid;
+}
+.bottom {
+    border-bottom: chocolate 5px solid;
+}
