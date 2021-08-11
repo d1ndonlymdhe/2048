@@ -5,6 +5,7 @@ NodeList.prototype.forEach = function (callback, thisArg) {
     }
 };
 class Game {
+    newTile = null;
     constructor() {
         this.state = [
             [0, 0, 0, 0],
@@ -88,7 +89,7 @@ class Game {
                 arr[i + 1] = 0;
             }
         }
-        console.log(arr);
+        // console.log(arr);
         return arr;
     }
     findNearest(row, index) {
@@ -120,11 +121,52 @@ class Game {
         do {
             rand1 = Math.floor(Math.random() * 4);
             rand2 = Math.floor(Math.random() * 4);
-            console.log("again");
-        } while (belongsTo(rand1 * 4 + rand2 - 2, this.occupied));
+        } while (belongsTo(rand1 * 4 + rand2, this.occupied));
+        console.log(rand1, rand2, rand1 * 4 + rand2);
         this.state[rand1][rand2] = 2;
+        try {
+            document.getElementById(this.newTile).classList.toggle("new");
+            console.log("removed old");
+        } catch {}
+        this.newTile = rand1 * 4 + rand2;
+        document.getElementById(this.newTile).classList.toggle("new");
+        console.log(this.newTile);
+        console.log("added new");
         this.getOccupiedFromState();
         this.renderState();
+    }
+    isComplete() {
+        if (this.occupied.length == 16) {
+            let arr = this.state;
+            this.up();
+            console.log(arr == this.state);
+            if (arr == this.state) {
+                return true;
+            }
+            this.state = arr;
+            this.down();
+            console.log(arr == this.state);
+
+            if (arr == this.state) {
+                return true;
+            }
+            this.state = arr;
+            this.right();
+            console.log(arr == this.state);
+
+            if (arr == this.state) {
+                return true;
+            }
+            this.state = arr;
+            this.left();
+            console.log(arr == this.state);
+
+            if (arr == this.state) {
+                return true;
+            }
+            this.state = arr;
+            return false;
+        }
     }
 }
 
@@ -165,25 +207,45 @@ function rotateArr(arr, direction) {
     }
 }
 
+function subtractArrays(arr1, arr2) {
+    let returnArr = [];
+    arr1.forEach((el) => {
+        if (!belongsTo(el, arr2)) {
+            returnArr.push(el);
+        }
+    });
+    return returnArr;
+}
+
 const game = new Game();
-console.log(game.occupied);
-// console.log(rotateArr(tempArr, "right"));
+
 window.addEventListener("keydown", (event) => {
-    console.log(event);
     if (event.key == "w" || event.key == "ArrowUp") {
         game.up();
         game.addRandom();
+        if (game.isComplete()) {
+            alert("game Over");
+        }
     }
     if (event.key == "s" || event.key == "ArrowDown") {
         game.down();
         game.addRandom();
+        if (game.isComplete()) {
+            alert("game Over");
+        }
     }
     if (event.key == "a" || event.key == "ArrowLeft") {
         game.left();
         game.addRandom();
+        if (game.isComplete()) {
+            alert("game Over");
+        }
     }
-    if (event.key == "D" || event.key == "ArrowRight") {
+    if (event.key == "d" || event.key == "ArrowRight") {
         game.right();
         game.addRandom();
+        if (game.isComplete()) {
+            alert("game Over");
+        }
     }
 });
