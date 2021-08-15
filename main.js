@@ -1,11 +1,11 @@
-NodeList.prototype.forEach = function (callback, thisArg) {
-    thisArg = thisArg || window;
-    for (var i = 0; i < this.length; i++) {
-        callback.call(thisArg, this[i], i, this);
-    }
-};
+// const { cloneDeep } = require("lodash");
+
+let gameHistory = [];
+
 class Game {
     newTile = null;
+    // stateHistory = [];
+    movesCounter = 0;
     constructor() {
         this.state = [
             [0, 0, 0, 0],
@@ -109,7 +109,7 @@ class Game {
         arr.forEach((row, i) => {
             row.forEach((cell, j) => {
                 if (cell != 0) {
-                    retArr.push(i * 4 + j - 2);
+                    retArr.push(i * 4 + j);
                 }
             });
         });
@@ -168,6 +168,9 @@ class Game {
             return false;
         }
     }
+    // addStateHistory() {
+    //     this.stateHistory.push(this.state);
+    // }
 }
 
 function belongsTo(el, arr) {
@@ -207,45 +210,69 @@ function rotateArr(arr, direction) {
     }
 }
 
-function subtractArrays(arr1, arr2) {
-    let returnArr = [];
-    arr1.forEach((el) => {
-        if (!belongsTo(el, arr2)) {
-            returnArr.push(el);
-        }
-    });
-    return returnArr;
+function addGameHistory() {
+    let x = _.cloneDeep(game);
+    gameHistory.push(x);
+    console.log(x);
 }
 
-const game = new Game();
+let game = new Game();
 
 window.addEventListener("keydown", (event) => {
     if (event.key == "w" || event.key == "ArrowUp") {
+        addGameHistory();
+        console.log(gameHistory, game);
         game.up();
         game.addRandom();
         if (game.isComplete()) {
             alert("game Over");
         }
+        game.movesCounter++;
     }
     if (event.key == "s" || event.key == "ArrowDown") {
+        addGameHistory();
         game.down();
         game.addRandom();
         if (game.isComplete()) {
             alert("game Over");
         }
+        game.movesCounter++;
     }
     if (event.key == "a" || event.key == "ArrowLeft") {
+        addGameHistory();
         game.left();
         game.addRandom();
         if (game.isComplete()) {
             alert("game Over");
         }
+        game.movesCounter++;
     }
     if (event.key == "d" || event.key == "ArrowRight") {
+        addGameHistory();
         game.right();
         game.addRandom();
         if (game.isComplete()) {
             alert("game Over");
         }
+        game.movesCounter++;
+    }
+});
+
+document.getElementById("undo").addEventListener("click", (event) => {
+    if (game.movesCounter > 0) {
+        game = gameHistory[gameHistory.length - 1];
+        gameHistory.pop();
+        // game.movesCounter--;
+        for (let i = 0; i < 16; i++) {
+            if (belongsTo("new", document.getElementById(i).classList)) {
+                document.getElementById(i).classList.toggle("new");
+            }
+        }
+        console.log(game.newTile);
+        document.getElementById(game.newTile).classList.toggle("new");
+        console.log(game.newTile);
+        console.log("added new");
+        game.getOccupiedFromState();
+        game.renderState();
     }
 });
