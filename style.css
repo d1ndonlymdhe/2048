@@ -42,8 +42,9 @@
     align-items: center;
     justify-content: center;
 }
-.new {
-    animation-name: new-tile;
+.new .tile {
+    /* animation-name: new-tile; */
+    animation-name: zoomIn;
     animation-duration: 2s;
 }
 .left {
