@@ -38,9 +38,10 @@ class Game {
         ];
         this.state.forEach((row, i) => {
             row.forEach((cell, j) => {
-                table[i][j].innerText = "";
+                console.log(table[i][j]);
+                table[i][j].children[0].innerText = "";
                 if (cell != 0) {
-                    table[i][j].innerText = cell;
+                    table[i][j].children[0].innerText = cell;
                 }
             });
         });
@@ -212,54 +213,54 @@ function rotateArr(arr, direction) {
 
 function addGameHistory() {
     let x = _.cloneDeep(game);
+    if (gameHistory.length > 5) {
+        gameHistory.reverse();
+        gameHistory.pop();
+        gameHistory.reverse();
+    }
     gameHistory.push(x);
-    console.log(x);
 }
 
 let game = new Game();
 
-window.addEventListener("keydown", (event) => {
+window.addEventListener("keydown", handleClick(event));
+
+let handleClick = (event) => {
     if (event.key == "w" || event.key == "ArrowUp") {
         addGameHistory();
         console.log(gameHistory, game);
         game.up();
+        game.getOccupiedFromState();
         game.addRandom();
-        if (game.isComplete()) {
-            alert("game Over");
-        }
         game.movesCounter++;
     }
     if (event.key == "s" || event.key == "ArrowDown") {
         addGameHistory();
         game.down();
+        game.getOccupiedFromState();
         game.addRandom();
-        if (game.isComplete()) {
-            alert("game Over");
-        }
         game.movesCounter++;
     }
     if (event.key == "a" || event.key == "ArrowLeft") {
         addGameHistory();
         game.left();
+        game.getOccupiedFromState();
         game.addRandom();
-        if (game.isComplete()) {
-            alert("game Over");
-        }
+
         game.movesCounter++;
     }
     if (event.key == "d" || event.key == "ArrowRight") {
         addGameHistory();
         game.right();
+        game.getOccupiedFromState();
         game.addRandom();
-        if (game.isComplete()) {
-            alert("game Over");
-        }
+
         game.movesCounter++;
     }
-});
+};
 
 document.getElementById("undo").addEventListener("click", (event) => {
-    if (game.movesCounter > 0) {
+    if (gameHistory.length > 1) {
         game = gameHistory[gameHistory.length - 1];
         gameHistory.pop();
         // game.movesCounter--;
