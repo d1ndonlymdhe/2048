@@ -223,9 +223,7 @@ function addGameHistory() {
 
 let game = new Game();
 
-window.addEventListener("keydown", handleClick(event));
-
-let handleClick = (event) => {
+let handleClick = () => {
     if (event.key == "w" || event.key == "ArrowUp") {
         addGameHistory();
         console.log(gameHistory, game);
@@ -246,7 +244,6 @@ let handleClick = (event) => {
         game.left();
         game.getOccupiedFromState();
         game.addRandom();
-
         game.movesCounter++;
     }
     if (event.key == "d" || event.key == "ArrowRight") {
@@ -258,6 +255,8 @@ let handleClick = (event) => {
         game.movesCounter++;
     }
 };
+
+window.addEventListener("keydown", handleClick);
 
 document.getElementById("undo").addEventListener("click", (event) => {
     if (gameHistory.length > 1) {

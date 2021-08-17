@@ -1,3 +1,12 @@
+@keyframes new-tile {
+    from {
+        background-color: rgb(161, 83, 27);
+    }
+    to {
+        background-color: rgb(192, 170, 140);
+    }
+}
+
 * {
     margin: 0;
 }
@@ -29,8 +38,14 @@
     text-align: center;
     color: black;
     font-size: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
+.new {
+    animation-name: new-tile;
+    animation-duration: 2s;
+}
 .left {
     border-left: chocolate 5px solid;
 }
@@ -42,7 +57,4 @@
 }
 .bottom {
     border-bottom: chocolate 5px solid;
-}
-.new {
-    background-color: green;
 }
